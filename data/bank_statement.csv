@@ -1,0 +1,11 @@
+txn_id,amount,date,status,merchant
+TXN001,500,2026-08-01,settled,Merchant_A
+TXN002,900,2026-08-01,settled,Merchant_B
+TXN003,750,2026-08-02,settled,Merchant_C
+TXN005,1500,2026-08-03,settled,Merchant_D
+TXN006,300,2026-08-03,settled,Merchant_B
+TXN007,850,2026-08-04,settled,Merchant_C
+TXN008,450,2026-08-04,settled,Merchant_A
+TXN009,950,2026-08-05,settled,Merchant_D
+TXN011,200,2026-08-05,settled,Merchant_E
+TXN012,400,2026-08-06,settled,Merchant_A
