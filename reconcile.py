@@ -1,8 +1,15 @@
 import pandas as pd
 
+def normalize_id(txn_id):
+    return str(txn_id).upper().replace('-','').replace('_','').strip()
+
 def load_data():
     razorpay = pd.read_csv('data/razorpay_records.csv')
+    razorpay['txn_id']=razorpay['txn_id'].apply(normalize_id)
+
     bank = pd.read_csv('data/bank_statement.csv')
+    bank['txn_id']=bank['txn_id'].apply(normalize_id)
+    
     return razorpay, bank
 
 def reconcile(razorpay, bank):
