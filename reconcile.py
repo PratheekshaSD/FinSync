@@ -3,21 +3,36 @@ import pandas as pd
 def normalize_id(txn_id):
     return str(txn_id).upper().replace('-','').replace('_','').strip()
 
+def detect_duplicates(df):
+    duplicates=df[df.duplicated(subset=['txn_id'],keep=False)]
+    return duplicates['txn_id'].unique().tolist()
+
 def load_data():
     razorpay = pd.read_csv('data/razorpay_records.csv')
     razorpay['txn_id']=razorpay['txn_id'].apply(normalize_id)
 
     bank = pd.read_csv('data/bank_statement.csv')
     bank['txn_id']=bank['txn_id'].apply(normalize_id)
-    
+
     return razorpay, bank
 
 def reconcile(razorpay, bank):
     matched = []
     exceptions = []
 
+    duplicate_ids=detect_duplicates(bank)
+    for dup_id in duplicate_ids:
+        exceptions.append({
+            'txn_id':dup_id,
+            'issue': 'duplicate_in_bank',
+            'razorpay_amount':None,
+            'bank_amount':bank[bank['txn_id']==dup_id].iloc[0]['amount']
+        })
+
     for _, rp_row in razorpay.iterrows():
         bank_row = bank[bank['txn_id'] == rp_row['txn_id']]
+
+        duplicate_ids=detect_duplicates(bank)
 
         if bank_row.empty:
             exceptions.append({
