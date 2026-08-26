@@ -32,6 +32,7 @@ def generate_report():
     for ex in analyzed_exceptions:
         print(f"\n  Transaction: {ex['txn_id']}")
         print(f"  Issue: {ex['issue']}")
+        print(f"  Risk: {ex.get('risk', 'UNKNOWN')}")
         print(f"  Razorpay Amount: {ex['razorpay_amount']}")
         print(f"  Bank Amount: {ex['bank_amount']}")
         print(f"  AI Analysis: {ex['ai_analysis']}")

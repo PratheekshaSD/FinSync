@@ -7,6 +7,17 @@ def detect_duplicates(df):
     duplicates=df[df.duplicated(subset=['txn_id'],keep=False)]
     return duplicates['txn_id'].unique().tolist()
 
+def get_risk_level(amount):
+    if amount is None:
+        return 'UNKNOWN'
+    amount=float(amount)
+    if amount>=100000:
+        return 'CRITICAL 🚨🚨'
+    elif amount>=10000:
+        return 'HIGH 🚨'
+    else:
+        return 'LOW'
+
 def load_data():
     razorpay = pd.read_csv('data/razorpay_records.csv')
     razorpay['txn_id']=razorpay['txn_id'].apply(normalize_id)
@@ -26,27 +37,28 @@ def reconcile(razorpay, bank):
             'txn_id':dup_id,
             'issue': 'duplicate_in_bank',
             'razorpay_amount':None,
-            'bank_amount':bank[bank['txn_id']==dup_id].iloc[0]['amount']
+            'bank_amount':bank[bank['txn_id']==dup_id].iloc[0]['amount'],
+            'risk': get_risk_level(bank[bank['txn_id']==dup_id].iloc[0]['amount'])
         })
 
     for _, rp_row in razorpay.iterrows():
         bank_row = bank[bank['txn_id'] == rp_row['txn_id']]
-
-        duplicate_ids=detect_duplicates(bank)
 
         if bank_row.empty:
             exceptions.append({
                 'txn_id': rp_row['txn_id'],
                 'issue': 'missing_in_bank',
                 'razorpay_amount': rp_row['amount'],
-                'bank_amount': None
+                'bank_amount': None,
+                'risk':get_risk_level(rp_row['amount'])
             })
         elif bank_row.iloc[0]['amount'] != rp_row['amount']:
             exceptions.append({
                 'txn_id': rp_row['txn_id'],
                 'issue': 'amount_mismatch',
                 'razorpay_amount': rp_row['amount'],
-                'bank_amount': bank_row.iloc[0]['amount']
+                'bank_amount': bank_row.iloc[0]['amount'],
+                'risk':get_risk_level(rp_row['amount'])
             })
         else:
             matched.append(rp_row['txn_id'])
@@ -58,7 +70,8 @@ def reconcile(razorpay, bank):
                 'txn_id': bank_row['txn_id'],
                 'issue': 'extra_in_bank',
                 'razorpay_amount': None,
-                'bank_amount': bank_row['amount']
+                'bank_amount': bank_row['amount'],
+                'risk': get_risk_level(bank_row['amount'])
             })
 
     return matched, exceptions

@@ -37,6 +37,7 @@ def analyze_all_exceptions(exceptions):
             'issue': exception['issue'],
             'razorpay_amount': exception['razorpay_amount'],
             'bank_amount': exception['bank_amount'],
+            'risk':exception.get('risk','UNKNOWN'),
             'ai_analysis': analysis
         })
     return results
