@@ -1,3 +1,4 @@
+import time
 from google import genai
 from dotenv import load_dotenv
 import os
@@ -32,6 +33,7 @@ def analyze_all_exceptions(exceptions):
     results = []
     for exception in exceptions:
         analysis = analyze_exception(exception)
+        time.sleep(5)
         results.append({
             'txn_id': exception['txn_id'],
             'issue': exception['issue'],

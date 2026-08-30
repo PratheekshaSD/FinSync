@@ -1,5 +1,6 @@
 import pandas as pd
 from thefuzz import fuzz
+from audit import init_audit,log
 
 def normalize_id(txn_id):
     return str(txn_id).upper().replace('-','').replace('_','').strip()
@@ -59,9 +60,11 @@ def load_data():
     return razorpay, bank
 
 def reconcile(razorpay, bank):
+    init_audit()
     matched = []
     exceptions = []
     settlement=load_settlement_report()
+
     duplicate_ids=detect_duplicates(bank)
     for dup_id in duplicate_ids:
         exceptions.append({
@@ -71,8 +74,11 @@ def reconcile(razorpay, bank):
             'bank_amount':bank[bank['txn_id']==dup_id].iloc[0]['amount'],
             'risk': get_risk_level(bank[bank['txn_id']==dup_id].iloc[0]['amount'])
         })
+        log(dup_id, 'EXCEPTION', f'duplicate_in_bank, amount={bank[bank["txn_id"]==dup_id].iloc[0]["amount"]}')
 
     for _, rp_row in razorpay.iterrows():
+        if rp_row['txn_id'] in duplicate_ids:
+            continue
         bank_row = bank[bank['txn_id'] == rp_row['txn_id']]
 
         if bank_row.empty:
@@ -83,6 +89,8 @@ def reconcile(razorpay, bank):
                 'bank_amount': None,
                 'risk':get_risk_level(rp_row['amount'])
             })
+            log(rp_row['txn_id'], 'EXCEPTION', f'missing_in_bank, amount={rp_row["amount"]}, risk={get_risk_level(rp_row["amount"])}')
+
         elif bank_row.iloc[0]['amount'] != rp_row['amount']:
             status, fee_type = check_settlement(
             rp_row['txn_id'],
@@ -92,6 +100,9 @@ def reconcile(razorpay, bank):
             )
             if status == 'resolved_by_fee':
                 matched.append(rp_row['txn_id'])
+                log(rp_row['txn_id'], 'MATCHED', f'resolved_by_fee, MDR fee deducted, amount={rp_row["amount"]}')
+
+            
             else:
                 exceptions.append({
                     'txn_id': rp_row['txn_id'],
@@ -100,22 +111,29 @@ def reconcile(razorpay, bank):
                     'bank_amount': bank_row.iloc[0]['amount'],
                     'risk': get_risk_level(rp_row['amount'])
                 })
-        else:
-            is_match,score=fuzzy_match_merchant(
-                rp_row['merchant'],
-                bank_row.iloc[0]['merchant']
-            )
-            if is_match:
-                matched.append(rp_row['txn_id'])
-            else:
-                exceptions.append({
-                    'txn_id': rp_row['txn_id'],
-                    'issue': 'merchant_mismatch',
-                    'razorpay_amount': rp_row['amount'],
-                    'bank_amount': bank_row.iloc[0]['amount'],
-                    'risk':get_risk_level(rp_row['amount'])
-                })
+                log(rp_row['txn_id'], 'EXCEPTION', f'{status}, amount={rp_row["amount"]}, risk={get_risk_level(rp_row["amount"])}')
 
+        else:
+            if rp_row['merchant'] == bank_row.iloc[0]['merchant']:
+                matched.append(rp_row['txn_id'])
+                log(rp_row['txn_id'], 'MATCHED', 'exact merchant match')
+            else:
+                is_match, score = fuzzy_match_merchant(
+                    rp_row['merchant'],
+                    bank_row.iloc[0]['merchant']
+                )
+                if is_match:
+                    matched.append(rp_row['txn_id'])
+                    log(rp_row['txn_id'], 'MATCHED', f'fuzzy merchant match, score={score}')
+                else:
+                    exceptions.append({
+                        'txn_id': rp_row['txn_id'],
+                        'issue': 'merchant_mismatch',
+                        'razorpay_amount': rp_row['amount'],
+                        'bank_amount': bank_row.iloc[0]['amount'],
+                        'risk': get_risk_level(rp_row['amount'])
+                    })
+                    log(rp_row['txn_id'], 'EXCEPTION', f'merchant_mismatch, score={score}, amount={rp_row["amount"]}')
     # check for extra entries in bank not in razorpay
     for _, bank_row in bank.iterrows():
         if bank_row['txn_id'] not in razorpay['txn_id'].values:
@@ -126,6 +144,8 @@ def reconcile(razorpay, bank):
                 'bank_amount': bank_row['amount'],
                 'risk': get_risk_level(bank_row['amount'])
             })
+            log(bank_row['txn_id'], 'EXCEPTION', f'extra_in_bank, amount={bank_row["amount"]}, risk={get_risk_level(bank_row["amount"])}')
+
 
     return matched, exceptions
 
