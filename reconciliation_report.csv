@@ -1,0 +1,60 @@
+SUMMARY
+Total Matched,Total Exceptions,Match Rate
+47,4,92.16%
+
+MATCHED TRANSACTIONS
+txn_id
+TXN001
+TXN002
+TXN003
+TXN004
+TXN005
+TXN006
+TXN008
+TXN009
+TXN010
+TXN011
+TXN012
+TXN013
+TXN014
+TXN015
+TXN016
+TXN018
+TXN019
+TXN020
+TXN021
+TXN022
+TXN023
+TXN024
+TXN025
+TXN026
+TXN027
+TXN028
+TXN029
+TXN030
+TXN031
+TXN032
+TXN033
+TXN034
+TXN035
+TXN036
+TXN037
+TXN038
+TXN039
+TXN040
+TXN041
+TXN042
+TXN043
+TXN044
+TXN045
+TXN046
+TXN047
+TXN048
+TXN049
+
+EXCEPTIONS
+txn_id,issue,risk,razorpay_amount,bank_amount,ai_analysis
+TXN017,duplicate_in_bank,HIGH 🚨,,81000,"This exception means that a bank statement entry of 81,000 exists for transaction TXN017, but there is no corresponding record found in the Razorpay gateway. This is most likely caused by a bank-side processing glitch resulting in a duplicate ledger entry, or a direct bank transfer that bypassed the payment gateway. To resolve this, verify the entry with your bank to request a reversal if it is an error, or manually map the record in your internal books if it was a valid direct settlement."
+TXN007,missing_in_bank,HIGH 🚨,50000,,"This exception means that transaction TXN007 was successfully captured for 50,000 in Razorpay, but no corresponding credit entry appears in your bank statement. This is most likely caused by a standard settlement processing delay (such as T+1/T+2 schedules or bank holiday lags) or an interrupted payout batch. To resolve this, check the settlement status window in your Razorpay dashboard, and if the expected settlement timeline has passed, raise a ticket with Razorpay support to trace the missing payout."
+TXN050,missing_in_bank,LOW,630,,"This exception indicates that a payment of 630 was successfully recorded in Razorpay, but no corresponding deposit appears in your bank statement for transaction TXN050. This is most likely caused by a settlement processing lag or a payout delay from Razorpay's end. To resolve this, check the settlement batch status for TXN050 in your Razorpay dashboard and, if the standard settlement timeline has elapsed, contact Razorpay support with the transaction ID to trace the funds."
+TXN051,extra_in_bank,LOW,,9900,"This exception means a credit of 9,900 was received in your bank account, but no corresponding transaction exists in Razorpay, which typically happens when a customer makes a direct bank transfer (like NEFT/IMPS) that bypasses the payment gateway. To resolve this, inspect the bank statement's UTR or reference details to identify the payer and manually match the funds to the appropriate customer invoice or ledger entry."
