@@ -18,6 +18,27 @@ def get_risk_level(amount):
     else:
         return 'LOW'
 
+def load_settlement_report():
+    settlement=pd.read_csv('data/settlement_report.csv')
+    settlement['txn_id']=settlement['txn_id'].apply(normalize_id)
+    return settlement
+
+def check_settlement(txn_id, razorpay_amount,bank_amount, settlement):
+    row=settlement[settlement['txn_id']==txn_id]
+    if row.empty:
+        return 'amount_mismatch',None
+    fee=row.iloc[0]['fee']
+    fee_type=row.iloc[0]['fee_type']
+
+    if fee_type=='PENDING':
+        return 'settlement_pending',fee_type
+
+    expected_bank_amount=razorpay_amount-fee
+    if expected_bank_amount==bank_amount:
+        return 'resolved_by_fee', fee_type
+    else:
+        return 'amount_mismatch',fee_type
+
 def load_data():
     razorpay = pd.read_csv('data/razorpay_records.csv')
     razorpay['txn_id']=razorpay['txn_id'].apply(normalize_id)
@@ -30,7 +51,7 @@ def load_data():
 def reconcile(razorpay, bank):
     matched = []
     exceptions = []
-
+    settlement=load_settlement_report()
     duplicate_ids=detect_duplicates(bank)
     for dup_id in duplicate_ids:
         exceptions.append({
@@ -53,13 +74,22 @@ def reconcile(razorpay, bank):
                 'risk':get_risk_level(rp_row['amount'])
             })
         elif bank_row.iloc[0]['amount'] != rp_row['amount']:
-            exceptions.append({
-                'txn_id': rp_row['txn_id'],
-                'issue': 'amount_mismatch',
-                'razorpay_amount': rp_row['amount'],
-                'bank_amount': bank_row.iloc[0]['amount'],
-                'risk':get_risk_level(rp_row['amount'])
-            })
+            status, fee_type = check_settlement(
+            rp_row['txn_id'],
+            rp_row['amount'],
+            bank_row.iloc[0]['amount'],
+            settlement
+            )
+            if status == 'resolved_by_fee':
+                matched.append(rp_row['txn_id'])
+            else:
+                exceptions.append({
+                    'txn_id': rp_row['txn_id'],
+                    'issue': status,
+                    'razorpay_amount': rp_row['amount'],
+                    'bank_amount': bank_row.iloc[0]['amount'],
+                    'risk': get_risk_level(rp_row['amount'])
+                })
         else:
             matched.append(rp_row['txn_id'])
 
