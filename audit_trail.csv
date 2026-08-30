@@ -1,52 +1,52 @@
 timestamp,txn_id,action,details
-2026-08-30 23:14:28,TXN017,EXCEPTION,"duplicate_in_bank, amount=81000"
-2026-08-30 23:14:28,TXN001,MATCHED,exact merchant match
-2026-08-30 23:14:28,TXN002,MATCHED,exact merchant match
-2026-08-30 23:14:28,TXN003,MATCHED,"resolved_by_fee, MDR fee deducted, amount=750"
-2026-08-30 23:14:28,TXN004,MATCHED,"fuzzy merchant match, score=80"
-2026-08-30 23:14:28,TXN005,MATCHED,exact merchant match
-2026-08-30 23:14:28,TXN006,MATCHED,exact merchant match
-2026-08-30 23:14:28,TXN007,EXCEPTION,"missing_in_bank, amount=50000, risk=HIGH 🚨"
-2026-08-30 23:14:28,TXN008,MATCHED,exact merchant match
-2026-08-30 23:14:28,TXN009,MATCHED,exact merchant match
-2026-08-30 23:14:28,TXN010,MATCHED,exact merchant match
-2026-08-30 23:14:28,TXN011,MATCHED,"resolved_by_fee, MDR fee deducted, amount=12000"
-2026-08-30 23:14:28,TXN012,MATCHED,exact merchant match
-2026-08-30 23:14:28,TXN013,MATCHED,exact merchant match
-2026-08-30 23:14:28,TXN014,MATCHED,exact merchant match
-2026-08-30 23:14:28,TXN015,MATCHED,exact merchant match
-2026-08-30 23:14:28,TXN016,MATCHED,exact merchant match
-2026-08-30 23:14:28,TXN018,MATCHED,exact merchant match
-2026-08-30 23:14:28,TXN019,MATCHED,exact merchant match
-2026-08-30 23:14:28,TXN020,MATCHED,exact merchant match
-2026-08-30 23:14:28,TXN021,MATCHED,exact merchant match
-2026-08-30 23:14:28,TXN022,MATCHED,exact merchant match
-2026-08-30 23:14:28,TXN023,MATCHED,exact merchant match
-2026-08-30 23:14:28,TXN024,MATCHED,exact merchant match
-2026-08-30 23:14:28,TXN025,MATCHED,exact merchant match
-2026-08-30 23:14:28,TXN026,MATCHED,exact merchant match
-2026-08-30 23:14:28,TXN027,MATCHED,exact merchant match
-2026-08-30 23:14:28,TXN028,MATCHED,exact merchant match
-2026-08-30 23:14:28,TXN029,MATCHED,exact merchant match
-2026-08-30 23:14:28,TXN030,MATCHED,exact merchant match
-2026-08-30 23:14:28,TXN031,MATCHED,exact merchant match
-2026-08-30 23:14:28,TXN032,MATCHED,exact merchant match
-2026-08-30 23:14:28,TXN033,MATCHED,exact merchant match
-2026-08-30 23:14:28,TXN034,MATCHED,exact merchant match
-2026-08-30 23:14:28,TXN035,MATCHED,exact merchant match
-2026-08-30 23:14:28,TXN036,MATCHED,"resolved_by_fee, MDR fee deducted, amount=800000"
-2026-08-30 23:14:28,TXN037,MATCHED,exact merchant match
-2026-08-30 23:14:28,TXN038,MATCHED,exact merchant match
-2026-08-30 23:14:28,TXN039,MATCHED,exact merchant match
-2026-08-30 23:14:28,TXN040,MATCHED,exact merchant match
-2026-08-30 23:14:28,TXN041,MATCHED,exact merchant match
-2026-08-30 23:14:28,TXN042,MATCHED,exact merchant match
-2026-08-30 23:14:28,TXN043,MATCHED,exact merchant match
-2026-08-30 23:14:28,TXN044,MATCHED,exact merchant match
-2026-08-30 23:14:28,TXN045,MATCHED,exact merchant match
-2026-08-30 23:14:28,TXN046,MATCHED,exact merchant match
-2026-08-30 23:14:28,TXN047,MATCHED,exact merchant match
-2026-08-30 23:14:28,TXN048,MATCHED,exact merchant match
-2026-08-30 23:14:28,TXN049,MATCHED,exact merchant match
-2026-08-30 23:14:28,TXN050,EXCEPTION,"missing_in_bank, amount=630, risk=LOW"
-2026-08-30 23:14:28,TXN051,EXCEPTION,"extra_in_bank, amount=9900, risk=LOW"
+2026-08-30 23:29:53,TXN017,EXCEPTION,"duplicate_in_bank, amount=81000"
+2026-08-30 23:29:53,TXN001,MATCHED,exact merchant match
+2026-08-30 23:29:53,TXN002,MATCHED,exact merchant match
+2026-08-30 23:29:53,TXN003,MATCHED,"resolved_by_fee, MDR fee deducted, amount=750"
+2026-08-30 23:29:53,TXN004,MATCHED,"fuzzy merchant match, score=80"
+2026-08-30 23:29:53,TXN005,MATCHED,exact merchant match
+2026-08-30 23:29:53,TXN006,MATCHED,exact merchant match
+2026-08-30 23:29:53,TXN007,EXCEPTION,"missing_in_bank, amount=50000, risk=HIGH 🚨"
+2026-08-30 23:29:53,TXN008,MATCHED,exact merchant match
+2026-08-30 23:29:53,TXN009,MATCHED,exact merchant match
+2026-08-30 23:29:53,TXN010,MATCHED,exact merchant match
+2026-08-30 23:29:53,TXN011,MATCHED,"resolved_by_fee, MDR fee deducted, amount=12000"
+2026-08-30 23:29:53,TXN012,MATCHED,exact merchant match
+2026-08-30 23:29:53,TXN013,MATCHED,exact merchant match
+2026-08-30 23:29:53,TXN014,MATCHED,exact merchant match
+2026-08-30 23:29:53,TXN015,MATCHED,exact merchant match
+2026-08-30 23:29:53,TXN016,MATCHED,exact merchant match
+2026-08-30 23:29:53,TXN018,MATCHED,exact merchant match
+2026-08-30 23:29:53,TXN019,MATCHED,exact merchant match
+2026-08-30 23:29:53,TXN020,MATCHED,exact merchant match
+2026-08-30 23:29:53,TXN021,MATCHED,exact merchant match
+2026-08-30 23:29:53,TXN022,MATCHED,exact merchant match
+2026-08-30 23:29:53,TXN023,MATCHED,exact merchant match
+2026-08-30 23:29:53,TXN024,MATCHED,exact merchant match
+2026-08-30 23:29:53,TXN025,MATCHED,exact merchant match
+2026-08-30 23:29:53,TXN026,MATCHED,exact merchant match
+2026-08-30 23:29:53,TXN027,MATCHED,exact merchant match
+2026-08-30 23:29:53,TXN028,MATCHED,exact merchant match
+2026-08-30 23:29:53,TXN029,MATCHED,exact merchant match
+2026-08-30 23:29:53,TXN030,MATCHED,exact merchant match
+2026-08-30 23:29:53,TXN031,MATCHED,exact merchant match
+2026-08-30 23:29:53,TXN032,MATCHED,exact merchant match
+2026-08-30 23:29:53,TXN033,MATCHED,exact merchant match
+2026-08-30 23:29:53,TXN034,MATCHED,exact merchant match
+2026-08-30 23:29:53,TXN035,MATCHED,exact merchant match
+2026-08-30 23:29:53,TXN036,MATCHED,"resolved_by_fee, MDR fee deducted, amount=800000"
+2026-08-30 23:29:53,TXN037,MATCHED,exact merchant match
+2026-08-30 23:29:53,TXN038,MATCHED,exact merchant match
+2026-08-30 23:29:53,TXN039,MATCHED,exact merchant match
+2026-08-30 23:29:53,TXN040,MATCHED,exact merchant match
+2026-08-30 23:29:53,TXN041,MATCHED,exact merchant match
+2026-08-30 23:29:53,TXN042,MATCHED,exact merchant match
+2026-08-30 23:29:53,TXN043,MATCHED,exact merchant match
+2026-08-30 23:29:53,TXN044,MATCHED,exact merchant match
+2026-08-30 23:29:53,TXN045,MATCHED,exact merchant match
+2026-08-30 23:29:53,TXN046,MATCHED,exact merchant match
+2026-08-30 23:29:53,TXN047,MATCHED,exact merchant match
+2026-08-30 23:29:53,TXN048,MATCHED,exact merchant match
+2026-08-30 23:29:53,TXN049,MATCHED,exact merchant match
+2026-08-30 23:29:53,TXN050,EXCEPTION,"missing_in_bank, amount=630, risk=LOW"
+2026-08-30 23:29:53,TXN051,EXCEPTION,"extra_in_bank, amount=9900, risk=LOW"

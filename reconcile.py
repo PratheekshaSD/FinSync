@@ -67,6 +67,9 @@ def reconcile(razorpay, bank):
 
     duplicate_ids=detect_duplicates(bank)
     for dup_id in duplicate_ids:
+
+        rp_amount=razorpay[razorpay['txn_id']==dup_id]['amount'].values
+        rp_amount=rp_amount[0] if len(rp_amount)>0 else None
         exceptions.append({
             'txn_id':dup_id,
             'issue': 'duplicate_in_bank',

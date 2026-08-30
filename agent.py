@@ -16,6 +16,7 @@ def analyze_exception(exception):
     - Issue Type: {exception['issue']}
     - Razorpay Amount: {exception['razorpay_amount']}
     - Bank Amount: {exception['bank_amount']}
+    - Additional Context: {"The bank has duplicates entries for this transaction ID. Razorpay has one record but the bank shows this transaction twice." if exception['issue']=='duplicate_in_bank' else "Standard reconciliation exception."}
     
     In 2-3 sentences:
     1. Explain what this exception means in simple terms
