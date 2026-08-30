@@ -1,4 +1,5 @@
 import pandas as pd
+from thefuzz import fuzz
 
 def normalize_id(txn_id):
     return str(txn_id).upper().replace('-','').replace('_','').strip()
@@ -38,6 +39,15 @@ def check_settlement(txn_id, razorpay_amount,bank_amount, settlement):
         return 'resolved_by_fee', fee_type
     else:
         return 'amount_mismatch',fee_type
+
+def normalize_merchant(name):
+    return str(name).upper().strip()
+
+def fuzzy_match_merchant(name1,name2,threshold=80):
+    n1=normalize_merchant(name1)
+    n2=normalize_merchant(name2)
+    score=fuzz.token_sort_ratio(n1,n2)
+    return score>=threshold,score
 
 def load_data():
     razorpay = pd.read_csv('data/razorpay_records.csv')
@@ -91,7 +101,20 @@ def reconcile(razorpay, bank):
                     'risk': get_risk_level(rp_row['amount'])
                 })
         else:
-            matched.append(rp_row['txn_id'])
+            is_match,score=fuzzy_match_merchant(
+                rp_row['merchant'],
+                bank_row.iloc[0]['merchant']
+            )
+            if is_match:
+                matched.append(rp_row['txn_id'])
+            else:
+                exceptions.append({
+                    'txn_id': rp_row['txn_id'],
+                    'issue': 'merchant_mismatch',
+                    'razorpay_amount': rp_row['amount'],
+                    'bank_amount': bank_row.iloc[0]['amount'],
+                    'risk':get_risk_level(rp_row['amount'])
+                })
 
     # check for extra entries in bank not in razorpay
     for _, bank_row in bank.iterrows():
