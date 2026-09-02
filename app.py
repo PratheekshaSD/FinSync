@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from reconcile import load_data, reconcile, get_match_rate
+from reconcile import load_data, reconcile, get_match_rate, normalize_id
 from agent import analyze_all_exceptions
 from report import export_to_csv
 
@@ -16,13 +16,21 @@ with col1:
 with col2:
     bank_file = st.file_uploader("Upload Bank Statement", type="csv")
 
-if razorpay_file and bank_file:
+settlement_file = st.file_uploader("Upload Settlement Report", type="csv")
+
+if razorpay_file and bank_file and settlement_file:
     if st.button("🚀 Run Reconciliation"):
         with st.spinner("Reconciling..."):
             razorpay = pd.read_csv(razorpay_file)
+            razorpay['txn_id']=razorpay['txn_id'].apply(normalize_id)
+
             bank = pd.read_csv(bank_file)
+            bank['txn_id']=bank['txn_id'].apply(normalize_id)
+
+            settlement=pd.read_csv(settlement_file)
+            settlement['txn_id']=settlement['txn_id'].apply(normalize_id)
             
-            matched, exceptions = reconcile(razorpay, bank)
+            matched, exceptions = reconcile(razorpay, bank,settlement)
             match_rate = get_match_rate(matched, exceptions)
 
         st.success(f"✅ Reconciliation Complete! Match Rate: {match_rate}%")

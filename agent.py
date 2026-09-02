@@ -23,12 +23,15 @@ def analyze_exception(exception):
     2. Suggest the most likely cause
     3. Recommend the next action to resolve it
     """
-    
-    response = client.models.generate_content(
-        model="gemini-3.6-flash",
-        contents=prompt
-    )
-    return response.text
+    try:
+        response = client.models.generate_content(
+            model="gemini-3.6-flash",
+            contents=prompt
+        )
+        return response.text
+
+    except Exception as e:
+        return "AI analysis unavailable (quota exceeded)"
 
 def analyze_all_exceptions(exceptions):
     results = []

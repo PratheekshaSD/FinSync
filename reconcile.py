@@ -59,11 +59,10 @@ def load_data():
 
     return razorpay, bank
 
-def reconcile(razorpay, bank):
+def reconcile(razorpay, bank,settlement):
     init_audit()
     matched = []
     exceptions = []
-    settlement=load_settlement_report()
 
     duplicate_ids=detect_duplicates(bank)
     for dup_id in duplicate_ids:
@@ -139,6 +138,8 @@ def reconcile(razorpay, bank):
                     log(rp_row['txn_id'], 'EXCEPTION', f'merchant_mismatch, score={score}, amount={rp_row["amount"]}')
     # check for extra entries in bank not in razorpay
     for _, bank_row in bank.iterrows():
+        if bank_row['txn_id'] in duplicate_ids:
+            continue
         if bank_row['txn_id'] not in razorpay['txn_id'].values:
             exceptions.append({
                 'txn_id': bank_row['txn_id'],
