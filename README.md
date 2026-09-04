@@ -144,4 +144,20 @@ FinSync makes it **fast, accurate, and explainable** — with AI that doesn't ju
 
 ---
 
+## Known Limitations
+
+| Limitation | Details |
+|---|---|
+| Refunds & chargebacks | Negative amount transactions not handled; refunded transactions may appear as mismatches |
+| Pending refunds | Cancelled orders with initiated-but-not-settled refunds are marked as matched incorrectly; requires a refund status report as a 4th data source |
+| Partial refunds | Only full amount matching supported; partial refunds cause false mismatches |
+| Percentage-based MDR | Settlement fees assumed to be fixed amounts; percentage-based MDR not yet supported |
+| Timing differences | T+1 or T+2 bank settlements flagged as missing in bank; not a real exception |
+| Bulk settlements | Razorpay batching multiple transactions into one bank credit not handled |
+| Multi-currency | No currency conversion logic; cross-border payments will mismatch |
+| Floating point precision | Sub-rupee fee differences may cause false amount mismatches |
+| Razorpay-side duplicates | Duplicate detection only on bank side; duplicates in Razorpay records not caught |
+
+
 *Built with 💙 for Razorpay AI Buildathon 2026*
+
